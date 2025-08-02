@@ -1,21 +1,12 @@
 https://www.svgrepo.com/show/345221/three-dots.svg/*  your css code here. If applicable */
 .container {
     margin-top: 50px;
-    text-align: center;
 }
 
-table {
-    margin-top: 20px;
-    border-collapse: collapse;
-    width: 100%;
-}
-
-th, td {
-    border: 1px solid #ddd;
-    padding: 10px;
+.form-group {
+    margin-bottom: 20px;
 }
 
 .delete {
     cursor: pointer;
-    color: red;
 }
