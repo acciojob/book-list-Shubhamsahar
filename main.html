@@ -1,16 +1,103 @@
 <!DOCTYPE html>
-
-<html>
-
+<html lang="en">
 <head>
-	<link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Book List</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-	<!-- the entire body must be written by student -->
-    <script type="text/javascript" src="./script.js">
-</script>
-
+    <div class="container">
+        <h1>MyBookList</h1>
+        <div class="form-group">
+            <form id="book-form">
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" id="title" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="author">Author</label>
+                    <input type="text" id="author" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="isbn">ISBN#</label>
+                    <input type="text" id="isbn" class="form-control">
+                </div>
+                <button type="submit" id="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>ISBN#</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="book-list"></tbody>
+        </table>
+    </div>
+    <script src="script.js"></script>
 </body>
-
 </html>
+
+
+style.css
+
+.container {
+    margin-top: 50px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.delete {
+    cursor: pointer;
+}
+
+
+script.js
+
+document.getElementById('book-form').addEventListener('submit', addBook);
+
+function addBook(e) {
+    e.preventDefault();
+    let title = document.getElementById('title').value;
+    let author = document.getElementById('author').value;
+    let isbn = document.getElementById('isbn').value;
+
+    if (title === '' || author === '' || isbn === '') {
+        alert('Please fill in all fields');
+        return;
+    }
+
+    let bookList = document.getElementById('book-list');
+    let row = document.createElement('tr');
+    row.innerHTML = `
+        <td>${title}</td>
+        <td>${author}</td>
+        <td>${isbn}</td>
+        <td><a class="delete" href="#">Clear</a></td>
+    `;
+    bookList.appendChild(row);
+
+    document.getElementById('title').value = '';
+    document.getElementById('author').value = '';
+    document.getElementById('isbn').value = '';
+
+    let deleteLinks = document.getElementsByClassName('delete');
+    for (let i = 0; i < deleteLinks.length; i++) {
+        deleteLinks[i].addEventListener('click', deleteBook);
+    }
+}
+
+function deleteBook(e) {
+    e.preventDefault();
+    if (confirm('Are you sure you want to delete this book?')) {
+        e.target.parentNode.parentNode.remove();
+    }
+}
+
