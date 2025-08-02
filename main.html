@@ -4,30 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Book List</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <h1>MyBookList</h1>
-        <div class="form-group">
-            <form id="book-form">
-                <div class="form-group">
-                    <label for="title">Title</label>
-                    <input type="text" id="title" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label for="author">Author</label>
-                    <input type="text" id="author" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label for="isbn">ISBN#</label>
-                    <input type="text" id="isbn" class="form-control">
-                </div>
-                <button type="submit" id="submit" class="btn btn-primary">Submit</button>
-            </form>
-        </div>
-        <table class="table table-striped">
+        <form id="book-form">
+            <input type="text" id="title" placeholder="Title">
+            <input type="text" id="author" placeholder="Author">
+            <input type="text" id="isbn" placeholder="ISBN#">
+            <button type="submit" id="submit">Submit</button>
+        </form>
+        <table>
             <thead>
                 <tr>
                     <th>Title</th>
@@ -48,56 +36,56 @@ style.css
 
 .container {
     margin-top: 50px;
+    text-align: center;
 }
 
-.form-group {
-    margin-bottom: 20px;
+table {
+    margin-top: 20px;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
 }
 
 .delete {
     cursor: pointer;
+    color: red;
 }
 
 
 script.js
 
-document.getElementById('book-form').addEventListener('submit', addBook);
+let bookForm = document.getElementById('book-form');
+let bookList = document.getElementById('book-list');
 
-function addBook(e) {
+bookForm.addEventListener('submit', (e) => {
     e.preventDefault();
     let title = document.getElementById('title').value;
     let author = document.getElementById('author').value;
     let isbn = document.getElementById('isbn').value;
 
-    if (title === '' || author === '' || isbn === '') {
-        alert('Please fill in all fields');
-        return;
+    if (title && author && isbn) {
+        let row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${title}</td>
+            <td>${author}</td>
+            <td>${isbn}</td>
+            <td><span class="delete">Clear</span></td>
+        `;
+        bookList.appendChild(row);
+
+        document.getElementById('title').value = '';
+        document.getElementById('author').value = '';
+        document.getElementById('isbn').value = '';
+
+        let deleteSpans = document.getElementsByClassName('delete');
+        for (let i = 0; i < deleteSpans.length; i++) {
+            deleteSpans[i].addEventListener('click', () => {
+                deleteSpans[i].parentNode.parentNode.remove();
+            });
+        }
     }
-
-    let bookList = document.getElementById('book-list');
-    let row = document.createElement('tr');
-    row.innerHTML = `
-        <td>${title}</td>
-        <td>${author}</td>
-        <td>${isbn}</td>
-        <td><a class="delete" href="#">Clear</a></td>
-    `;
-    bookList.appendChild(row);
-
-    document.getElementById('title').value = '';
-    document.getElementById('author').value = '';
-    document.getElementById('isbn').value = '';
-
-    let deleteLinks = document.getElementsByClassName('delete');
-    for (let i = 0; i < deleteLinks.length; i++) {
-        deleteLinks[i].addEventListener('click', deleteBook);
-    }
-}
-
-function deleteBook(e) {
-    e.preventDefault();
-    if (confirm('Are you sure you want to delete this book?')) {
-        e.target.parentNode.parentNode.remove();
-    }
-}
-
+});
